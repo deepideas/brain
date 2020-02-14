@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<VTKFile type="Collection" version="0.1" byte_order="LittleEndian" header_type="UInt32" compressor="vtkZLibDataCompressor">
+  <Collection>
+    <DataSet timestep="0" group="source5333" part="0" file="mni_grey_surface/mni_grey_surface_source5333T0000.vtm"/>
+    <DataSet timestep="0.111111" group="source5333" part="0" file="mni_grey_surface/mni_grey_surface_source5333T0000.vtm"/>
+    <DataSet timestep="0.222222" group="source5333" part="0" file="mni_grey_surface/mni_grey_surface_source5333T0000.vtm"/>
+    <DataSet timestep="0.333333" group="source5333" part="0" file="mni_grey_surface/mni_grey_surface_source5333T0000.vtm"/>
+    <DataSet timestep="0.444444" group="source5333" part="0" file="mni_grey_surface/mni_grey_surface_source5333T0000.vtm"/>
+    <DataSet timestep="0.555556" group="source5333" part="0" file="mni_grey_surface/mni_grey_surface_source5333T0000.vtm"/>
+    <DataSet timestep="0.666667" group="source5333" part="0" file="mni_grey_surface/mni_grey_surface_source5333T0000.vtm"/>
+    <DataSet timestep="0.777778" group="source5333" part="0" file="mni_grey_surface/mni_grey_surface_source5333T0000.vtm"/>
+    <DataSet timestep="0.888889" group="source5333" part="0" file="mni_grey_surface/mni_grey_surface_source5333T0000.vtm"/>
+    <DataSet timestep="1" group="source5333" part="0" file="mni_grey_surface/mni_grey_surface_source5333T0000.vtm"/>
+  </Collection>
+</VTKFile>

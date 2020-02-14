@@ -1,0 +1,225 @@
+@font-face {
+    font-family: 'Antic Slab';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Antic Slab Regular'), local('AnticSlab-Regular'), url(//fonts.gstatic.com/s/anticslab/v8/bWt97fPFfRzkCa9Jlp6IacVcWQ.ttf) format('truetype');
+}
+@font-face {
+    font-family: 'PT Sans';
+    font-style: normal;
+    font-weight: 400;
+    src: local('PT Sans'), local('PTSans-Regular'), url(//fonts.gstatic.com/s/ptsans/v11/jizaRExUiTo99u79D0KEwA.ttf) format('truetype');
+}
+
+/*
+ * Base structure
+ */
+
+/* Move down content because we have a fixed navbar that is 3.5rem tall */
+body {
+    padding-top: 3.5rem;
+    background-color: #eff0f1;
+    font-family: "PT Sans";
+    color: #747474;
+}
+
+/*
+ * Typography
+ */
+
+h1 {
+    padding-bottom: 9px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+h1, h2, h3, h4, h5 {
+    font-family: "Antic Slab";
+    color: #333333;
+    margin-bottom: 5px;
+}
+
+a {
+    color: #1a80b6;
+}
+
+/*a.jstree-anchor {
+    color: #1a80b6 !important;
+}*/
+
+/*
+ * Navbar
+ */
+.navbar {
+    background-color: white;
+    padding-left: 40px;
+    padding-right: 40px;
+    box-shadow: 0px 0px 25px 1px rgba(0,0,0,0.11) !important;
+}
+
+/*
+ * Main
+ */
+
+.main {
+    position: fixed;
+    top: 51px;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 1000;
+    overflow-x: hidden;
+}
+
+/*
+ * Dashboard
+ */
+
+/* Placeholders */
+.placeholders {
+    padding-bottom: 3rem;
+}
+
+.placeholder img {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.card {
+    border: none;
+    border-radius: 0px;
+    box-shadow: 0px 0px 25px 1px rgba(0,0,0,0.11) !important;
+    min-height: 60px;
+    transition: all 0.35s ease-in-out;
+}
+.card-body {
+    padding: 20px;
+}
+
+.padding {
+    padding: 0.5em;
+}
+
+.margin-right {
+    margin-right: 40px;
+}
+
+.margin-bottom {
+    margin-bottom: 40px;
+}
+
+.margin-left {
+    margin-left: 40px;
+}
+
+.margin-top {
+    margin-top: 50px;
+}
+
+.slider-horizontal {
+    flex: 1;
+    width: 80% !important;
+}
+
+/*
+ * Card sections
+ */
+.card-sections button {
+    width: 130px;
+    cursor: pointer;
+}
+
+
+.jstree-themeicon-custom {
+    background-size: 22px !important;
+}
+
+.jstree-proton {
+    font-family: "PT Sans" !important;
+}
+
+/*
+ * 3D main box
+ */
+#status {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 20px;
+}
+
+/*
+ * 3D tool buttons
+ */
+span.toolbutton_3d {
+    cursor: pointer;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+span.toolbutton_3d svg {
+    fill: currentColor;
+    width: 40px;
+    height: 40px;
+}
+
+/*
+ * Social media icons
+ */
+ul.share-buttons{
+    list-style: none;
+    padding: 0;
+}
+
+ul.share-buttons li{
+    display: inline;
+}
+
+ul.share-buttons .sr-only{
+    position: absolute;
+    clip: rect(1px 1px 1px 1px);
+    clip: rect(1px, 1px, 1px, 1px);
+    padding: 0;
+    border: 0;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+}
+
+/*
+ * Pointer icon for sidebar buttons
+ */
+.fa {
+    color: #747474;
+}
+.fa-compress {
+    cursor: pointer;
+}
+.fa-sort-up {
+    cursor: pointer;
+}
+.fa-sort-down {
+    cursor: pointer;
+}
+.fa-question-circle {
+    cursor: pointer;
+}
+
+/*
+ * Options
+ */
+.options-row {
+    margin-bottom: 10px;
+}
+
+/*
+ * Brain navigation buttons
+ */
+.brain-navigation-buttons {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    user-select: none;
+    color: #747474;
+}

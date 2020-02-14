@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="">
+    <meta name="description" content="An interactive 3D encyclopedia of the human brain that allows you to navigate through the hierarchical anatomical structure of the brain with ease.">
+    <link rel="icon" href="favicon.ico">
+
+    <title>brain.deepideas.net: An interactive encyclopedia of the human brain</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/main.css?1" rel="stylesheet">
+
+    <!-- Jstree -->
+    <link href="js/libs/jstree/themes/proton/style.min.css" rel="stylesheet">
+    <!--<link href="js/libs/jstree/themes/default/style.min.css" rel="stylesheet">-->
+
+    <!-- JQuery UI -->
+    <link rel="stylesheet" href="js/libs/jqueryui/1.12.1/jquery-ui.css">
+
+    <!-- Bootstrap slider -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/css/bootstrap-slider.min.css">
+
+    <meta name="description" content="deep ideas brain is an interactive encyclopedia of the human brain that allows you to navigate through the hierarchical anatomical structure of the brain with ease. It is primarily intended for students and researchers who want to explore the brain and make sense of the large vocabulary used in brain anatomy, which includes many synonyms for the same regions, partially overlapping regions and regions nested within other regions.">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="libs/font-awesome-5.12.1/css/all.min.css">
+
+    <!-- Shaders -->
+    <script type="x-shader/x-vertex" id="vertexShader">
+#define PHONG
+varying vec3 vViewPosition;
+#ifndef FLAT_SHADED
+varying vec3 vNormal;
+#endif
+#include <common>
+#include <uv_pars_vertex>
+#include <uv2_pars_vertex>
+#include <displacementmap_pars_vertex>
+#include <envmap_pars_vertex>
+#include <color_pars_vertex>
+#include <fog_pars_vertex>
+#include <morphtarget_pars_vertex>
+#include <skinning_pars_vertex>
+#include <shadowmap_pars_vertex>
+#include <logdepthbuf_pars_vertex>
+#include <clipping_planes_pars_vertex>
+
+void main() {
+    #include <uv_vertex>
+    #include <uv2_vertex>
+    #include <color_vertex>
+    #include <beginnormal_vertex>
+    #include <morphnormal_vertex>
+    #include <skinbase_vertex>
+    #include <skinnormal_vertex>
+    #include <defaultnormal_vertex>
+#ifndef FLAT_SHADED
+    vNormal = normalize( transformedNormal );
+#endif
+    #include <begin_vertex>
+    #include <morphtarget_vertex>
+    #include <skinning_vertex>
+    #include <displacementmap_vertex>
+    #include <project_vertex>
+    #include <logdepthbuf_vertex>
+    #include <clipping_planes_vertex>
+    vViewPosition = - mvPosition.xyz;
+    #include <worldpos_vertex>
+    #include <envmap_vertex>
+    #include <shadowmap_vertex>
+    #include <fog_vertex>
+
+}
+
+    </script>
+    <script type="x-shader/x-fragment" id="fragmentShader">
+#define PHONG
+uniform vec3 diffuse;
+uniform vec3 emissive;
+uniform vec3 specular;
+uniform float shininess;
+uniform float opacity;
+#include <common>
+#include <packing>
+#include <dithering_pars_fragment>
+#include <color_pars_fragment>
+#include <uv_pars_fragment>
+#include <uv2_pars_fragment>
+#include <map_pars_fragment>
+#include <alphamap_pars_fragment>
+#include <aomap_pars_fragment>
+#include <lightmap_pars_fragment>
+#include <emissivemap_pars_fragment>
+#include <envmap_pars_fragment>
+#include <gradientmap_pars_fragment>
+#include <fog_pars_fragment>
+#include <bsdfs>
+#include <lights_pars>
+#include <lights_phong_pars_fragment>
+#include <shadowmap_pars_fragment>
+#include <bumpmap_pars_fragment>
+#include <normalmap_pars_fragment>
+#include <specularmap_pars_fragment>
+#include <logdepthbuf_pars_fragment>
+#include <clipping_planes_pars_fragment>
+
+void main() {
+	#include <clipping_planes_fragment>
+	vec4 diffuseColor = vec4( diffuse, opacity );
+	ReflectedLight reflectedLight = ReflectedLight( vec3( 0.0 ), vec3( 0.0 ), vec3( 0.0 ), vec3( 0.0 ) );
+	vec3 totalEmissiveRadiance = emissive;
+	#include <logdepthbuf_fragment>
+	#include <map_fragment>
+	#include <color_fragment>
+	#include <alphamap_fragment>
+	#include <alphatest_fragment>
+	#include <specularmap_fragment>
+	#include <normal_fragment>
+	#include <emissivemap_fragment>
+	#include <lights_phong_fragment>
+	#include <lights_template>
+	#include <aomap_fragment>
+	vec3 outgoingLight = reflectedLight.directDiffuse + reflectedLight.indirectDiffuse + reflectedLight.directSpecular + reflectedLight.indirectSpecular + totalEmissiveRadiance;
+	#include <envmap_fragment>
+	gl_FragColor = vec4( outgoingLight, diffuseColor.a );
+	if ( gl_FrontFacing ) {
+
+        gl_FragColor = vec4( outgoingLight, diffuseColor.a );
+
+    } else {
+
+        gl_FragColor = diffuseColor;
+
+    }
+
+	#include <tonemapping_fragment>
+	#include <encodings_fragment>
+	#include <fog_fragment>
+	#include <premultiplied_alpha_fragment>
+	#include <dithering_fragment>
+
+}
+
+    </script>
+
+    <script>
+        var DEBUG = false;
+    </script>
+</head>
+
+<body>
+
+<!-- Screenshot save window -->
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Facebook like button -->
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v6.0&appId=352626571841679&autoLogAppEvents=1"></script>
+
+<!-- Slice canvases -->
+<canvas id="slice_region_canvas_combined_x_lower" width="185" height="158" style="display: none;"></canvas>
+<canvas id="slice_region_canvas_combined_x_upper" width="185" height="158" style="display: none;"></canvas>
+<canvas id="slice_region_canvas_combined_y_lower" width="158" height="148" style="display: none;"></canvas>
+<canvas id="slice_region_canvas_combined_y_upper" width="158" height="148" style="display: none;"></canvas>
+<canvas id="slice_region_canvas_combined_z_lower" width="148" height="185" style="display: none;"></canvas>
+<canvas id="slice_region_canvas_combined_z_upper" width="148" height="185" style="display: none;"></canvas>
+
+<canvas id="slice_region_canvas_single_x" width="185" height="158" style="display: none;"></canvas>
+<canvas id="slice_region_canvas_single_y" width="158" height="148" style="display: none;"></canvas>
+<canvas id="slice_region_canvas_single_z" width="148" height="185" style="display: none;"></canvas>
+
+<header>
+    <nav class="navbar navbar-light fixed-top justify-content-start">
+        <a class="navbar-brand" href="http://brain.deepideas.net"><img src="logo.png" style="height: 30px;"></a>
+
+
+        <div>
+            <input class="form-control mr-sm-2" id="query" type="text" placeholder="Search" aria-label="Search">
+        </div>
+
+        <ul class="nav ml-auto share-buttons" style="color:white;">
+            <li style="padding-right:10px;" class="d-flex align-items-center"><a class="" href="https://github.com/deepideas/brain" target="new">View source code</a></li>
+            <li style="padding-right:10px;">&bull;</li>
+            <li style="padding-right:10px;" class="d-flex align-items-center"><a class="" href="https://github.com/deepideas/brain/issues" target="new">Report an issue</a></li>
+            <li style="padding-right:10px;">&bull;</li>
+            <li>
+                <div class="fb-like" data-href="https://www.facebook.com/deepideas.net/" data-width="" data-layout="button_count" data-action="like" data-size="small" data-share="false"></div>
+            </li>
+
+        </ul>
+
+
+        <!--<button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Settings</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Help</a>
+                </li>
+            </ul>
+        </div>-->
+    </nav>
+</header>
+
+<div class="container-fluid">
+    <div class="row">
+        <!--<nav class="col-sm-3 col-md-3 d-none d-sm-block bg-light sidebar" style="overflow: auto; padding-left: 10px; padding-right: 10px;">
+            <div style="margin-bottom: 10px;">
+                <input class="form-control mr-sm-2" id="query" type="text" placeholder="Search" aria-label="Search">
+            </div>
+            <div id="jstree"></div>
+        </nav>-->
+        <main role="main" class="main">
+
+
+            <div class="d-flex flex-row" style="height: 100%;">
+
+
+                <div class="d-flex flex-column" style="flex: 1;">
+                    <div class="card d-flex flex-column margin-right margin-left margin-top margin-bottom" style="flex: 1; overflow: hidden;" id="panel-brain-regions">
+                        <div class="card-body d-flex flex-column">
+                            <h5>
+                                Brain regions
+                                <span class="fa fa-sort-up compress-button" style="display: block; float: right; margin-left: 15px;" onclick="compress('panel-brain-regions');"></span>
+                                <span class="fa fa-sort-down decompress-button" style="display: block; float: right; margin-left: 15px; display: none;" onclick="decompress('panel-brain-regions');"></span>
+                                <span class="fa fa-question-circle" style="display: block; float: right;" data-toggle="tooltip" title="A tree structure of brain regions. Click on the plus sign next to a brain region in order to expand it, which reveals its subregions. Click on the name of a brain region to open it. In order to select multiple brain regions, hold the Ctrl key while clicking on them."></span>
+                            </h5>
+                            <div class="compressable" style="flex: 1; overflow: auto;">
+                                <div id="jstree"></div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="card d-flex flex-column margin-bottom margin-left margin-right" style="flex: 1; overflow: hidden;" id="panel-wikipedia">
+                        <div class="card-body d-flex flex-column">
+                            <h5>
+                                Description
+                                <span class="fa fa-sort-up compress-button" style="display: block; float: right; margin-left: 15px;" onclick="compress('panel-wikipedia');"></span>
+                                <span class="fa fa-sort-down decompress-button" style="display: block; float: right; margin-left: 15px; display: none;" onclick="decompress('panel-wikipedia');"></span>
+                            </h5>
+
+                            <div class="compressable" style="flex: 1; overflow: auto;">
+
+                                <div id="wikipedia-text">
+                                    <p>
+                                        brain.deepideas.net is an interactive encyclopedia of the human brain that allows you to navigate
+                                        through the hierarchical anatomical structure of the brain with ease.
+                                        It is primarily intended for students and researchers who want to explore the brain
+                                        and make sense of the large vocabulary used in brain anatomy, which includes many synonyms
+                                        for the same regions, partially overlapping regions and regions nested within other regions.
+
+                                        <!--Cerebropedia contains the entire Harvard-Oxford Atlas and all
+                                        <a href="https://en.wikipedia.org/wiki/Brodmann_area" target="_blank">Brodmann areas</a>.-->
+                                    </p>
+
+                                    <p>
+                                        In the upper left, you see a tree structure of brain regions.
+                                        You can expand regions to view their subregions by clicking on the plus sign.
+
+                                        When you select a brain region, you'll see a 3D model of that brain region superimposed on the 3D brain model on the right-hand side,
+                                        which you can view at deliberate angles by clicking
+                                        on it and moving your mouse. Moreover, you can zoom in by scrolling. Alternatively, you can use the navigation buttons below the 3D model.
+
+                                        If you want to look inside the brain, you can select from various types
+                                        of sections (medial, lateral, etc.) by clicking on one of the buttons. Alternatively,
+                                        you can use the sliders to specify the desired MNI coordinate ranges yourself.
+                                    </p>
+
+                                    <p>
+                                        brain.deepideas.net draws from data obtained from the Harvard Oxford Atlas (Craddock et al., 2012), the ICBM 152 Nonlinear atlases (Fonov et al., 2009, 2011) and the English Wikipedia (en.wikipedia.org).
+                                    </p>
+
+                                    <p>
+                                        brain.deepideas.net has been developed by Daniel Sabinasz (<a href="mailto:daniel@sabinasz.net">daniel@sabinasz.net</a>, <a href="http://www.deepideas.net">deepideas.net</a>). If you find bugs, content-wise mistakes or have any questions, remarks or suggestions, please feel free to contact me.
+                                    </p>
+
+                                    <h3>References</h3>
+
+                                    <p>Craddock, R. C., James, G. A., Holtzheimer, P. E., Hu, X. P., & Mayberg, H. S. (2012). A whole brain fMRI atlas generated via spatially constrained spectral clustering. <i>Human brain mapping, 33</i>(8), 1914-1928.</p>
+                                    <p>Fonov, V. S., Evans, A. C., McKinstry, R. C., Almli, C. R., & Collins, D. L. (2009). Unbiased nonlinear average age-appropriate brain templates from birth to adulthood. <i>Neuroimage, 47</i>(1), S102.</p>
+                                    <p>Fonov, V., Evans, A. C., Botteron, K., Almli, C. R., McKinstry, R. C., Collins, D. L., & Brain Development Cooperative Group. (2011). Unbiased average age-appropriate atlases for pediatric studies. <i>Neuroimage, 54</i>(1), 313-327.</p>
+
+                                </div>
+
+                                <div id="wikipedia-images_card" style="display: none;">
+
+                                    <div id="wikipedia-images" class="card-body d-flex flex-column">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div id="panel-slice" class="card d-flex flex-column margin-left margin-bottom margin-right" style="flex: 1; overflow: hidden;">
+                        <div class="card-body d-flex flex-column">
+                            <h5>
+                                Slice
+                                <span class="fa fa-sort-up compress-button" style="display: block; float: right; margin-left: 15px;" onclick="compress('panel-slice');"></span>
+                                <span class="fa fa-sort-down decompress-button" style="display: block; float: right; margin-left: 15px; display: none;" onclick="decompress('panel-slice');"></span>
+                                <span class="fa fa-question-circle" style="display: block; float: right;" data-toggle="tooltip" title="Show only a subsection of the 3D brain, sliced along x, y, or z in MNI coordinates. Either select a predefined section or drag the handles to specify custom lower and upper bounds."></span>
+                            </h5>
+
+                            <div class="compressable" style="flex: 1; overflow: auto;">
+
+                                <div class="d-flex flex-row options-row">
+                                    <div class="d-flex align-self-center" style="flex: 1;">Section</div>
+                                    <div class="d-flex align-self-center" style="flex: 1.618033989;">
+                                        <select name="section">
+                                            <option value="wholebrain">Whole brain</option>
+                                            <option value="left">Left</option>
+                                            <option value="medial">Medial</option>
+                                            <option value="right">Right</option>
+                                            <option value="anterior">Anterior</option>
+                                            <option value="posterior">Posterior</option>
+                                            <option value="superior">Superior</option>
+                                            <option value="middle">Middle</option>
+                                            <option value="inferior">Inferior</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex flex-row options-row">
+                                    <div class="d-flex align-self-center" style="flex: 1;">x</div>
+                                    <div class="d-flex align-self-center flex-row" style="flex: 1.618033989;">
+                                        <div class="d-flex" style="margin-right: 20px; text-align: right;" id="x-slider-val-lower"></div>
+                                        <input id="x-slider" style="flex:1;" type="text" class="span2" value="" data-slider-min="-7.4" data-slider-max="7.4" data-slider-step="0.1" data-slider-value="[-7.4, 7.4]"/>
+                                        <div class="d-flex" style="margin-left: 20px; text-align: left;" id="x-slider-val-upper"></div>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex flex-row options-row">
+                                    <div class="d-flex align-self-center" style="flex: 1;">y</div>
+                                    <div class="d-flex align-self-center flex-row" style="flex: 1.618033989;">
+                                        <div class="d-flex" style="margin-right: 20px; text-align: right;" id="y-slider-val-lower"></div>
+                                        <input id="y-slider" type="text" class="span2" value="" data-slider-min="-11" data-slider-max="7.5" data-slider-step="0.1" data-slider-value="[-11, 7.5]"/>
+                                        <div class="d-flex" style="margin-left: 20px; text-align: left;" id="y-slider-val-upper"></div>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex flex-row options-row">
+                                    <div class="d-flex align-self-center" style="flex: 1;">z</div>
+                                    <div class="d-flex align-self-center flex-row" style="flex: 1.618033989;">
+                                        <div class="d-flex" style="margin-right: 20px; text-align: right;" id="z-slider-val-lower"></div>
+                                        <input id="z-slider" type="text" class="span2" value="" data-slider-min="-7.4" data-slider-max="8.4" data-slider-step="0.1" data-slider-value="[-7.4, 8.4]"/>
+                                        <div class="d-flex" style="margin-left: 20px; text-align: left;" id="z-slider-val-upper"></div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div id="panel-options" class="card d-flex flex-column margin-left margin-bottom margin-right" style="flex: 1; overflow: hidden;">
+                        <div class="card-body d-flex flex-column">
+                            <h5>
+                                Options
+                                <span class="fa fa-sort-up compress-button" style="display: block; float: right; margin-left: 15px;" onclick="compress('panel-options');"></span>
+                                <span class="fa fa-sort-down decompress-button" style="display: block; float: right; margin-left: 15px; display: none;" onclick="decompress('panel-options');"></span>
+                                <span class="fa fa-question-circle" style="display: block; float: right;" data-toggle="tooltip" title="Show 3D brain: Whether or not the 3D brain should be visible. Auto rotate: Whether or not the 3D brain should automatically rotate. Section: Which section of the brain should be visible. Slice x, y, z: Which ranges of the brain in Talairach coordinates should be visible; sliders allow to control both lower bound and upper bound. Slice image: Which kind of image should be used for 2D slices of the brain. Flash regions: Whether or not brain region models should flash (appear and disapper periodically). Region 2D slice opacity: The opacity of 2D slice images of brain regions. Region 3D object opacity: The opacity of 3D models of brain regions."></span>
+                            </h5>
+
+                            <div class="compressable" style="flex: 1; overflow: auto;">
+
+                                <div class="d-flex flex-row options-row">
+                                    <div class="d-flex align-self-center" style="flex: 1;">Show 3D brain</div>
+                                    <div class="d-flex align-self-center" style="flex: 1.618033989;">
+                                        <input type="checkbox" checked id="show_gray_matter">
+                                    </div>
+                                </div>
+
+                                <div class="d-flex flex-row options-row">
+                                    <div class="d-flex align-self-center" style="flex: 1;">Auto rotate</div>
+                                    <div class="d-flex align-self-center" style="flex: 1.618033989;">
+                                        <input type="checkbox" id="rotate" checked>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex flex-row options-row">
+                                    <div class="d-flex align-self-center" style="flex: 1;">Slice image</div>
+                                    <div class="d-flex align-self-center" style="flex: 1.618033989;">
+                                        <select name="mni-image">
+                                            <option value="mixed">Tissue</option>
+                                            <option value="t1">T1</option>
+                                            <option value="t2">T2</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex flex-row options-row">
+                                    <div class="d-flex align-self-center" style="flex: 1;">Flash regions</div>
+                                    <div class="d-flex align-self-center" style="flex: 1.618033989;">
+                                        <input type="checkbox" id="flash" checked>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex flex-row options-row">
+                                    <div class="d-flex align-self-center" style="flex: 1;">Region 2D slice opacity</div>
+                                    <div class="d-flex align-self-center" style="flex: 1.618033989;">
+                                        <input id="opacity-2d-slider" type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="60"/>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex flex-row options-row">
+                                    <div class="d-flex align-self-center" style="flex: 1;">Region 3D object opacity</div>
+                                    <div class="d-flex align-self-center" style="flex: 1.618033989;">
+                                        <input id="opacity-3d-slider" type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="50"/>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="d-flex flex-column" style="flex: 1.618033989;">
+
+                    <div id="card-brain" class="card card-box-shadow d-flex flex-column margin-top margin-bottom margin-right" style="flex: 4;">
+                        <div style="flex: 1; position: relative;">
+                            <div id="container_3d" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0;">
+                            </div>
+
+                            <div class="brain-navigation-buttons">
+                                <span title="Rotate left" data-toggle="tooltip" class="toolbutton_3d" onmousedown="brain3d.startRotate([1, 0]);" onmouseup="brain3d.stopRotate();" onmouseout="brain3d.stopRotate();">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7.11 8.53L5.7 7.11C4.8 8.27 4.24 9.61 4.07 11h2.02c.14-.87.49-1.72 1.02-2.47zM6.09 13H4.07c.17 1.39.72 2.73 1.62 3.89l1.41-1.42c-.52-.75-.87-1.59-1.01-2.47zm1.01 5.32c1.16.9 2.51 1.44 3.9 1.61V17.9c-.87-.15-1.71-.49-2.46-1.03L7.1 18.32zM13 4.07V1L8.45 5.55 13 10V6.09c2.84.48 5 2.94 5 5.91s-2.16 5.43-5 5.91v2.02c3.95-.49 7-3.85 7-7.93s-3.05-7.44-7-7.93z"/></svg>
+                                </span>
+                                    <span title="Rotate right" data-toggle="tooltip" class="toolbutton_3d" onmousedown="brain3d.startRotate([-1, 0]);" onmouseup="brain3d.stopRotate();" onmouseout="brain3d.stopRotate();">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.55 5.55L11 1v3.07C7.06 4.56 4 7.92 4 12s3.05 7.44 7 7.93v-2.02c-2.84-.48-5-2.94-5-5.91s2.16-5.43 5-5.91V10l4.55-4.45zM19.93 11c-.17-1.39-.72-2.73-1.62-3.89l-1.42 1.42c.54.75.88 1.6 1.02 2.47h2.02zM13 17.9v2.02c1.39-.17 2.74-.71 3.9-1.61l-1.44-1.44c-.75.54-1.59.89-2.46 1.03zm3.89-2.42l1.42 1.41c.9-1.16 1.45-2.5 1.62-3.89h-2.02c-.14.87-.48 1.72-1.02 2.48z"/></svg>
+                                </span>
+                                    <span title="Rotate up" data-toggle="tooltip" class="toolbutton_3d" onmousedown="brain3d.startRotate([0, 1]);" onmouseup="brain3d.stopRotate();" onmouseout="brain3d.stopRotate();">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"/></svg>
+                                </span>
+                                    <span title="Rotate down" data-toggle="tooltip" class="toolbutton_3d" onmousedown="brain3d.startRotate([0, -1]);" onmouseup="brain3d.stopRotate();" onmouseout="brain3d.stopRotate();">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"/></svg>
+                                </span>
+                                    <span title="Zoom in" data-toggle="tooltip" class="toolbutton_3d" onmousedown="brain3d.startZoom(1);" onmouseup="brain3d.stopZoom();" onmouseout="brain3d.stopZoom();">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14zm2.5-4h-2v2H9v-2H7V9h2V7h1v2h2v1z"/></svg>
+                                </span>
+                                    <span title="Zoom out" data-toggle="tooltip" class="toolbutton_3d" onmousedown="brain3d.startZoom(-1);" onmouseup="brain3d.stopZoom();" onmouseout="brain3d.stopZoom();">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14zM7 9h5v1H7z"/></svg>
+                                </span>
+                                    <span title="Reset view" data-toggle="tooltip" class="toolbutton_3d" onmousedown="brain3d.resetView();">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15 3l2.3 2.3-2.89 2.87 1.42 1.42L18.7 6.7 21 9V3zM3 9l2.3-2.3 2.87 2.89 1.42-1.42L6.7 5.3 9 3H3zm6 12l-2.3-2.3 2.89-2.87-1.42-1.42L5.3 17.3 3 15v6zm12-6l-2.3 2.3-2.87-2.89-1.42 1.42 2.89 2.87L15 21h6z"/></svg>
+                                </span>
+                                    <span title="Save image" data-toggle="tooltip" class="toolbutton_3d" onmousedown="brain3d.saveImage();">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </main>
+    </div>
+</div>
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="js/libs/jquery/jquery-3.4.1.min.js"></script>
+<script src="js/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+
+<script>
+    jQuery( function() {
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)) {
+            $("body").html("brain.deepideas.net currently only works with desktop PCs or laptops. Please come back using such a device.")
+        }
+    });
+</script>
+
+<script src="js/libs/popperjs/popper.min.js"></script>
+<script src="bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+<script src="js/libs/jstree/jstree.min.js"></script>
+
+<script src="js/libs/three/three.min.js"></script>
+
+<script src="js/orbitcontrols.js?2"></script>
+
+<script src="js/libs/three/STLLoader.js"></script>
+<script src="js/libs/three/VTKLoader.js"></script>
+
+<script src="js/libs/three/Detector.js"></script>
+<script src="js/libs/three/stats.min.js"></script>
+
+<script src="js/libs/three/slice.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/bootstrap-slider.min.js"></script>
+<!-- https://github.com/gasparesganga/jquery-loading-overlay -->
+<script src="js/libs/loadingoverlay/2.1.6/loadingoverlay.min.js"></script>
+<!--<script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@1.5.4/extras/loadingoverlay_progress/loadingoverlay_progress.min.js"></script>-->
+
+<script src="js/util.js?1"></script>
+<script src="js/subgeom.js?60"></script>
+<script src="js/talairach.js?4"></script>
+<script src="js/brain3d.js?391"></script>
+<script src="js/wiki.js?2"></script>
+<script src="js/tree.js?24"></script>
+<script src="js/sidebar-ui.js?1"></script>
+<script src="js/main.js?15"></script>
+
+</body>
+</html>

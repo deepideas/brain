@@ -1,0 +1,15 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    Daniel Sabinasz -- maintainer -- https://twitter.com/deepideas_net
+
+# THANKS
+
+    Prof. Boris Suchan
+
+# TECHNOLOGY COLOPHON
+
+    CSS3, HTML5
+    Apache Server Configs, jQuery, Three.js, jsTree
