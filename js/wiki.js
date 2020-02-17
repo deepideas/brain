@@ -43,7 +43,7 @@ var wiki = (function() {
             wiki = wiki.split("#")[0];
             $.ajax({
                 type: "GET",
-                url: "http://en.wikipedia.org/w/api.php?action=parse&format=json&prop=text&section=0&page=" + wiki + "&callback=?",
+                url: "https://en.wikipedia.org/w/api.php?action=parse&format=json&prop=text&section=0&page=" + wiki + "&callback=?",
                 contentType: "application/json; charset=utf-8",
                 async: false,
                 dataType: "json",

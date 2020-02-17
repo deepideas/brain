@@ -227,7 +227,7 @@ var brain3d = (function() {
             scenes_brain_regions[view] = new THREE.Scene();
 
             // Camera
-            cameras[view] = new THREE.PerspectiveCamera( 60, $(containers[view]).width() / $(containers[view]).height(), 0.01, 1e10 );
+            cameras[view] = new THREE.PerspectiveCamera( 60, $(containers[view]).width() / $(containers[view]).height(), 10, 1000 );
             var camera_pos = views[view]["pos"].clone().normalize().multiplyScalar(default_camera_distance);
             console.log("Set camera pos", camera_pos);
             cameras[view].position.set(camera_pos.x, camera_pos.y, camera_pos.z);
@@ -381,6 +381,7 @@ var brain3d = (function() {
         controls.staticMoving = true;
         controls.dynamicDampingFactor = 0.3;
         controls.autoRotate = true;
+        controls.maxDistance = 900;
 
         containers["3d"].addEventListener( 'mousedown', function() {
             controls.autoRotate = false;
