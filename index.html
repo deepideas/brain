@@ -155,7 +155,7 @@ void main() {
 
 <body>
 
-<!-- Screenshot save window -->
+<!-- Modal window -->
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -166,6 +166,46 @@ void main() {
                 </button>
             </div>
             <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="donate" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Donate</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                brain.deepideas.net is developed by Daniel Sabinasz and provided for free, along with its source code.
+                If you want to contribute to its further development, feel free to donate an amount of your choice.
+
+                <hr>
+
+                <h5>Donate via PayPal</h5>
+                <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+                    <input type="hidden" name="cmd" value="_donations" />
+                    <input type="hidden" name="business" value="daniel@sabinasz.net" />
+                    <input type="hidden" name="item_name" value="brain.deepideas.net development" />
+                    <input type="hidden" name="currency_code" value="EUR" />
+                    <input type="image" src="https://www.paypalobjects.com/en_US/DK/i/btn/btn_donateCC_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+                    <img alt="" border="0" src="https://www.paypal.com/en_DE/i/scr/pixel.gif" width="1" height="1" />
+                </form>
+
+                <hr>
+
+                <h5>Donate via Bitcoin</h5>
+                <a href="bitcoin:BC1Q5ZCTM637M8QWFHQ2Z9V552G7JN7Y5Q2JLCMMEV?label=brain.deepideas.net%20donations">bc1q5zctm637m8qwfhq2z9v552g7jn7y5q2jlcmmev</a>
+                <a href="bitcoin:BC1Q5ZCTM637M8QWFHQ2Z9V552G7JN7Y5Q2JLCMMEV?label=brain.deepideas.net%20donations"><img src="bitcoin_qr_code.png" style="width: 50%;"></a>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -204,10 +244,11 @@ void main() {
             <li style="padding-right:10px;">&bull;</li>
             <li style="padding-right:10px;" class="d-flex align-items-center"><a class="" href="https://github.com/deepideas/brain/issues" target="new">Report an issue</a></li>
             <li style="padding-right:10px;">&bull;</li>
+            <li style="padding-right:10px;" class="d-flex align-items-center"><a class="" href="javascript:donate();" target="new">Donate</a></li>
+            <li style="padding-right:10px;">&bull;</li>
             <li>
                 <div class="fb-like" data-href="https://www.facebook.com/deepideas.net/" data-width="" data-layout="button_count" data-action="like" data-size="small" data-share="false"></div>
             </li>
-
         </ul>
 
 
@@ -507,7 +548,7 @@ void main() {
 <script>
     jQuery( function() {
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)) {
-            $("body").html("brain.deepideas.net currently only works with desktop PCs or laptops. Please come back using such a device.")
+            $("body").html("brain.deepideas.net currently only works with desktop PCs or laptops. A version for mobile phones will arrive in fall 2020. Until then, here is a teaser: <img src='cell_phone_coming_soon.png'>")
         }
     });
 </script>
@@ -542,6 +583,7 @@ void main() {
 <script src="js/tree.js?24"></script>
 <script src="js/sidebar-ui.js?1"></script>
 <script src="js/main.js?15"></script>
+<script src="js/donate.js"></script>
 
 </body>
 </html>
