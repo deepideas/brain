@@ -182,7 +182,7 @@ var brain3d = (function() {
     }
 
     function loadModel(path, loader) {
-        loader.load( path, function(geometry) {
+        loader.load( URL + path, function(geometry) {
 
             //geometry.center();
             //geometry.computeVertexNormals();
@@ -756,7 +756,7 @@ var brain3d = (function() {
         },
 
         loadSliceImage: function(axis, coordinate) {
-            var path = "models/generated/slices/" + mni_image + "_" + axis + "_" + Math.round(coordinate) + ".png";
+            var path = URL + "models/generated/slices/" + mni_image + "_" + axis + "_" + Math.round(coordinate) + ".png";
             if (!(path in slice_image_cache)) {
                 slice_image_cache[path] = textureLoader.load(path);
             }
@@ -802,7 +802,7 @@ var brain3d = (function() {
 
             for (var i = 0; i < active_nodes.length; i++) {
                 var node = active_nodes[i];
-                var path = "models/generated/regions/" + node.id + "_" + axis + "_" + Math.round(coordinate) + ".png";
+                var path = URL + "models/generated/regions/" + node.id + "_" + axis + "_" + Math.round(coordinate) + ".png";
 
                 var region_image = new Image();
                 region_image.src = path;
@@ -850,7 +850,7 @@ var brain3d = (function() {
                 var stlLoader = new THREE.STLLoader();
                 setStatusLoading3D(node);
                 console.log("Load: " + "models/generated/3d/" + node.id + ".stl");
-                stlLoader.load("models/generated/3d/" + node.id + ".stl", function (geometry) {
+                stlLoader.load(URL + "models/generated/3d/" + node.id + ".stl", function (geometry) {
                     if ("borrowed_models" in node.original) {
                         setStatusBorrowed(node);
                     } else {
